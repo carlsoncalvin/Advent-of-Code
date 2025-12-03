@@ -1,14 +1,16 @@
 from pathlib import Path
 import math
 
+# constants
 DATA_DIR = Path(__file__).resolve().parents[2] / "data"
-
 DIAL_LENGTH = 100
 DIRECTION = {"R": 1, "L": -1}
 
+# parser
 def parse_input(text: str) -> list[str]:
     return text.strip().splitlines()
 
+# part 1
 def solve_part1(lines: list[str]) -> int:
     position = 50
     zero_count = 0
@@ -25,6 +27,7 @@ def solve_part1(lines: list[str]) -> int:
 
     return zero_count
 
+# part 2
 def solve_part2(lines: list[str]) -> int:
     '''
     A nice implementation that uses intervals to avoid counting crossings with modulo arithmetic
