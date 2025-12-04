@@ -1,6 +1,6 @@
 from pathlib import Path
 import numpy as np
-from numpy import ndarray
+from numpy import ndarray, signedinteger
 
 # I could probably use numba and parallelization, but for a first pass I'll just brute force
 
@@ -8,7 +8,8 @@ from numpy import ndarray
 DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 
 # parser
-def parse_input(text: str) -> np.ndarray[tuple[int, int], np.dtype[bool]]:
+def parse_input(text: str) -> ndarray[tuple[int, int], np.dtype[bool]]:
+    """Parses the input into a boolean grid of rolls and spaces."""
     lines = text.strip().splitlines()
     grid = np.empty((len(lines), len(lines[0])), dtype=bool)
     for i, line in enumerate(lines):
@@ -16,11 +17,12 @@ def parse_input(text: str) -> np.ndarray[tuple[int, int], np.dtype[bool]]:
         grid[i, :] = row
     return grid
 
-def get_window(grid: ndarray[tuple[int, int], np.dtype[any]],
+def get_window(grid: ndarray[tuple[int, int], np.dtype[bool|signedinteger]],
                row: int,
                col: int,
                n_rows: int,
                n_cols: int) -> ndarray[tuple[int, int], np.dtype[bool]]:
+    """Returns a window centered around the given row and column, accounting for boundaries."""
     left = col - 1 if col > 0 else 0
     right = col + 2 if col < n_rows - 1 else None
     top = row - 1 if row > 0 else 0
@@ -30,6 +32,10 @@ def get_window(grid: ndarray[tuple[int, int], np.dtype[any]],
 
 
 def solve_part1(grid: ndarray[tuple[int, int], np.dtype[bool]]) -> int:
+    """
+    Slides a window along the grid and takes the sum of each window to find the total number of
+    rolls. Skips spaces, and rolls in corners are always counted.
+    """
     n_rows, n_cols = grid.shape
     top_or_bot = (0, n_rows-1)
     left_or_right = (0, n_cols-1)
@@ -56,6 +62,10 @@ def solve_part1(grid: ndarray[tuple[int, int], np.dtype[bool]]) -> int:
 # gets updated. The plan is to id every spot in the grid sequentially to track the rolls.
 # Okay the neighbor list is a dict not a list but whatever
 def generate_nb_dict(grid: ndarray[tuple[int, int], np.dtype[bool]]):
+    """
+    Generates a dict of all rolls in the grid, keyed by a sequential roll id based on the roll's
+    position in the grid. Dict values contain a list of all roll ids that are neighbors.
+    """
     n_rows, n_cols = grid.shape
     nb_dict = {}
     id_grid = np.arange(n_rows * n_cols).reshape(n_rows, n_cols)
@@ -67,8 +77,8 @@ def generate_nb_dict(grid: ndarray[tuple[int, int], np.dtype[bool]]):
                 spot_id = id_grid[row, col]
                 nb_dict[spot_id] = []
 
-    # reiterate through the entire grid and populate neighbor lists
-    # there´s probably a more efficient way but i can't think of it now
+    # reiterate through the entire grid and populate neighbor lists. there´s probably a more
+    # efficient way but i can't think of it now. this only runs once so whatever
     for row in range(n_rows):
         for col in range(n_cols):
             if grid[row, col]:
@@ -81,6 +91,10 @@ def generate_nb_dict(grid: ndarray[tuple[int, int], np.dtype[bool]]):
 
 
 def solve_part2(grid: ndarray[tuple[int, int], np.dtype[bool]]) -> int:
+    """
+    Iterates through the dict of neighbors and removes rolls that have less than 4 neighbors. When
+    each roll is removed, only the affected neighbor lists are checked and updated.
+    """
     n_rows, n_cols = grid.shape
 
     # generate dict of nb list and populate
