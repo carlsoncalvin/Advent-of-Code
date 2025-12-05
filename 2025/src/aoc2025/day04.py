@@ -140,7 +140,7 @@ def main() -> None:
     text = input_path.read_text(encoding="utf-8")
     grid = parse_input(text)
 
-    print("Day 2")
+    print("Day 4")
     print("Part 1:", solve_part1(grid))
     print("Part 2:", solve_part2(grid))
 
