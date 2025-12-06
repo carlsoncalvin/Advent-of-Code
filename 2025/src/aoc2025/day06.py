@@ -16,6 +16,7 @@ def solve_part1(lines: list[str]) -> int:
     numbers = np.array([line.strip().split() for line in lines], dtype=int) # get integers
     total = 0
     for col in range(numbers.shape[1]):
+        # perform operation on each column of numbers
         total += OP_DICT[operations[col]](numbers[:, col])
     return total
 
@@ -26,13 +27,17 @@ def solve_part2(lines: list[str]) -> int:
     operation on the resulting strings (converted to int). The final result is summed.
     """
     operations = lines.pop(-1)
+    # identify the start of each column
     col_starts = [idx for idx in range(len(operations)) if operations[idx] != " "]
     total = 0
     for i, col in enumerate(col_starts):
-        end = col_starts[i+1] if i+1 < len(col_starts) else len(operations)
-        line_stack = [line[col:end] for line in lines]
+        end = col_starts[i+1] if i+1 < len(col_starts) else len(operations) # find end of column
+        line_stack = [line[col:end] for line in lines] # get lines of only this problem
+
+        # get numbers from right to left, joined vertically
         numbers = ["".join([line[-n].strip() for line in line_stack])
                    for n in range(1, len(line_stack[0]) + 1)]
+
         # if len(num) accounts for empty string caused by the whitespace column between problems
         total += OP_DICT[operations[col]]([int(num) for num in numbers if len(num)])
 
