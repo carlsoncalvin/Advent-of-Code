@@ -42,6 +42,9 @@ def solve_part2(lines: list[str]) -> int:
         total += OP_DICT[operations[col]]([int(num) for num in numbers if len(num)])
 
     return total
+# I realized that I don't have to go from right to left when joining the stacks, but I
+# think I'll just leave the code how it is. It's a bit more convoluted than it needs to be, but
+# i'll keep it for posterity
 
 def main() -> None:
     input_path = DATA_DIR / "day06.txt"
