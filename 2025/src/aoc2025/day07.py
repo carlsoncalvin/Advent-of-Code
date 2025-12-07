@@ -28,6 +28,7 @@ def solve_part2(lines: list[str]) -> int:
     for line in lines:
         splitters = [i for i, e in enumerate(line) if e == "^"]
         for s in splitters:
+            # if n tachyons present at splitter location, add n to adjacent columns
             if tachyons[s] != 0:
                 tachyons[s-1] += tachyons[s]
                 tachyons[s+1] += tachyons[s]
