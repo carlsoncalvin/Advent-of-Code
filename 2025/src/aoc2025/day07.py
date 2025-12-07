@@ -8,6 +8,7 @@ def parse_input(text: str) -> list[str]:
     return text.splitlines()
 
 def solve_part1(lines: list[str]) -> int:
+    """Tracks beam locations and counts the number of times a beam splits."""
     beam = {lines[0].index("S")} # set that tracks beam locations
     count = 0
     for line in lines:
@@ -21,6 +22,7 @@ def solve_part1(lines: list[str]) -> int:
     return count
 
 def solve_part2(lines: list[str]) -> int:
+    """Tracks number of tachyons at each beam location and sums the final values."""
     tachyons = [0]*len(lines[0]) # now we track tachyons instead of beam locations
     tachyons[lines[0].index("S")] = 1
     for line in lines:
