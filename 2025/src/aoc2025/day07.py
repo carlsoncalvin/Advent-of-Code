@@ -9,10 +9,10 @@ def parse_input(text: str) -> list[str]:
 
 def solve_part1(lines: list[str]) -> int:
     """Tracks beam locations and counts the number of times a beam splits."""
-    beam = {lines[0].index("S")} # set that tracks beam locations
+    beam = {lines[0].index("S")} # set that tracks beam locations during descent
     count = 0
     for line in lines:
-        splitters = [i for i, e in enumerate(line) if e == "^"] # find splitters
+        splitters = [i for i, e in enumerate(line) if e == "^"] # find splitter locations
         old_beam = beam.copy()
         for b in old_beam:
             if b in splitters:
@@ -23,10 +23,10 @@ def solve_part1(lines: list[str]) -> int:
 
 def solve_part2(lines: list[str]) -> int:
     """Tracks number of tachyons at each beam location and sums the final values."""
-    tachyons = [0]*len(lines[0]) # now we track tachyons instead of beam locations
+    tachyons = [0]*len(lines[0]) # now we track tachyons as we descend instead of beam locations
     tachyons[lines[0].index("S")] = 1
     for line in lines:
-        splitters = [i for i, e in enumerate(line) if e == "^"]
+        splitters = [i for i, e in enumerate(line) if e == "^"] # get splitter locations
         for s in splitters:
             # if n tachyons present at splitter location, add n to adjacent columns
             if tachyons[s] != 0:
