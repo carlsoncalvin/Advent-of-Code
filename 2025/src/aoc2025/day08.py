@@ -1,6 +1,4 @@
 from pathlib import Path
-from typing import Any
-
 import numpy as np
 from numpy import ndarray, dtype
 from scipy.spatial.distance import pdist
