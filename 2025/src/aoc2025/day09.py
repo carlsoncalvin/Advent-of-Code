@@ -13,6 +13,9 @@ def squared_distance(x1, y1, x2, y2):
     return (x2 - x1)**2 + (y2 - y1)**2
 
 def solve_part1(coords: ndarray[tuple[int, ...], np.dtype[int]]) -> int:
+    # I know what I call top, bottom, etc. is actually inverted because the puzzle input has
+    # (0,0) in the top left, not bottom right, but it doesn't change anything.
+
     # get the corners of the grid
     top_left = (max(coords[:, 0]), max(coords[:, 1]))
     top_right = (min(coords[:, 0]), max(coords[:, 1]))
