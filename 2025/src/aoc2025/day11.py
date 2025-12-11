@@ -1,4 +1,5 @@
 from pathlib import Path
+import datetime
 
 # constants
 DATA_DIR = Path(__file__).resolve().parents[2] / "data"
@@ -30,11 +31,12 @@ def dfs(start: str, end: str, device_dict: dict[str, str], visited=None,
         # dac comes first in my set
         if part2 and node == "dac":
             seen_dac = True
+        # if we encounter fft before dac we break
         if part2 and node == "fft" and not seen_dac:
             return None
         if node not in visited:
             visited.append(node)
-            dfs(node, end,  device_dict, visited, all_paths, seen_dac=seen_dac)
+            dfs(node, end,  device_dict, visited, all_paths, part2=part2, seen_dac=seen_dac)
             visited.pop()
 
     return all_paths
@@ -44,7 +46,16 @@ def solve_part1(device_dict: dict[str, str]) -> int:
     return len(all_paths)
 
 def solve_part2(device_dict: dict[str, str]) -> int:
+    start_time = datetime.datetime.now()
+    print(start_time.time(), "part 2 started")
+
     all_paths = dfs("svr", "out", device_dict, part2=True)
+
+    end_time = datetime.datetime.now()
+    print(end_time.time(), "part 2 ended")
+    total_time = end_time - start_time
+    print(total_time, "total time")
+
     return len(all_paths)
 
 def main() -> None:
