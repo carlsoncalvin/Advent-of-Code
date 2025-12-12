@@ -39,9 +39,9 @@ def solve_part1(shapes, trees) -> int:
         # presents must fit - plenty of room
         tree_area = np.prod(dimensions)
         num_presents = sum(quantities)
-        if tree_area // 9 >= num_presents:
-            fit_count += 1
-            continue
+        if tree_area // 9 >= num_presents: # this condition doesn't account for the 3x3 shape, just
+            fit_count += 1                 # total area. could have situations where it return true
+            continue                       # but is actually false
 
         # presents can't fit
         if tree_area <= sum(present_areas * quantities):
